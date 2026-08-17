@@ -18,19 +18,22 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   check-black:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           fetch-depth: 0
       - name: Set up Python 3.10
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: "3.10"
       - id: file_changes
-        uses: Ana06/get-changed-files@v1.2
+        uses: Ana06/get-changed-files@a2f6df8c195e713211f9f6258baafc445149355b
       - name: check black
         env:
           CHANGED_FILES: ${{ steps.file_changes.outputs.added_modified }}
@@ -39,9 +42,9 @@ jobs:
   lint-flake-8:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
       - name: Set up Python 3.10
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: "3.10"
       - name: Lint with flake8
@@ -58,9 +61,9 @@ jobs:
       matrix:
         python-version: ["3.10"]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
@@ -73,7 +76,7 @@ jobs:
         run: |
           pytest tests/ -v -s --full-trace --junitxml=pytest-report.xml
       - name: Upload pytest report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: failure() # Only runs if the previous step fails
         with:
           name: pytest-reports
